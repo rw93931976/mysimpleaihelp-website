@@ -3,8 +3,10 @@
     position: fixed;
     bottom: 20px;
     right: 20px;
-    z-index: 1000;
+    z-index: 9999;
     font-family: Arial, sans-serif;
+    display: block !important;
+    visibility: visible !important;
 }
 
 .chat-toggle-button {
@@ -13,12 +15,14 @@
     width: 60px;
     height: 60px;
     border-radius: 50%;
-    display: flex;
+    display: flex !important;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     transition: transform 0.3s ease;
+    visibility: visible !important;
+    opacity: 1 !important;
 }
 
 .chat-toggle-button:hover {
@@ -40,18 +44,17 @@
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
     flex-direction: column;
     overflow: hidden;
-    position: absolute;
-    bottom: 0; /* Align to the bottom of the widget container */
-    right: 0; /* Align to the right of the widget container */
-    transform: translateY(calc(100% + 10px)); /* Initially below the button */
+    position: fixed;
+    bottom: 90px;
+    right: 20px;
     opacity: 0;
-    transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+    transition: opacity 0.3s ease-out;
 }
 
 .chat-container.open {
-    display: flex; /* Show when open */
-    transform: translateY(-580px); /* Move up to desired position above button */
-    opacity: 1;
+    display: flex !important;
+    opacity: 1 !important;
+    visibility: visible !important;
 }
 
 .chat-header {

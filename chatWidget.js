@@ -1,34 +1,50 @@
 // chatWidget.js
 document.addEventListener('DOMContentLoaded', () => {
-    const chatToggleButton = document.getElementById('chat-toggle-button');
-    const chatContainer = document.getElementById('chat-container');
-    const closeChatButton = document.getElementById('close-chat-button');
-    const chatInput = document.getElementById('chat-input');
-    const chatSendButton = document.getElementById('chat-send-button');
-    const chatBody = document.getElementById('chat-body');
+    // Helper function to get element and log if not found
+    function getElement(id) {
+        const element = document.getElementById(id);
+        if (!element) {
+            console.error(`Archie Chat Widget Error: Element with ID "${id}" not found.`);
+        }
+        return element;
+    }
 
-    const API_ENDPOINT = '/api/chat'; // Your Vercel serverless function endpoint
-    const AUTO_OPEN_DELAY = 7000; // 7 seconds
+    const chatToggleButton = getElement('chat-toggle-button');
+    const chatContainer = getElement('chat-container');
+    const closeChatButton = getElement('close-chat-button');
+    const chatInput = getElement('chat-input');
+    const chatSendButton = getElement('chat-send-button');
+    const chatBody = getElement('chat-body');
 
-    let threadId = localStorage.getItem('archieThreadId'); // Load thread_id from localStorage
+    // IMPORTANT: Add checks before using elements to prevent errors from undefined
+    if (!chatToggleButton || !chatContainer || !closeChatButton || !chatInput || !chatSendButton || !chatBody) {
+        console.error("Archie Chat Widget: Essential elements are missing. Widget functionality disabled.");
+        return; // Stop execution if critical elements are missing
+    }
 
-    // --- Helper Functions ---
+    const API_ENDPOINT = '/api/chat';
+    const AUTO_OPEN_DELAY = 7000;
+
+    let threadId = localStorage.getItem('archieThreadId');
+
     function appendMessage(sender, text) {
         const messageBubble = document.createElement('div');
         messageBubble.classList.add('message-bubble', sender);
         messageBubble.textContent = text;
         chatBody.appendChild(messageBubble);
-        chatBody.scrollTop = chatBody.scrollHeight; // Auto-scroll to bottom
+        chatBody.scrollTop = chatBody.scrollHeight;
     }
 
     function toggleChat(open) {
         if (open) {
             chatContainer.classList.add('open');
-            chatToggleButton.style.display = 'none';
+            // Check if chatToggleButton exists before trying to access its style
+            if (chatToggleButton) chatToggleButton.style.display = 'none';
             chatInput.focus();
         } else {
             chatContainer.classList.remove('open');
-            chatToggleButton.style.display = 'flex';
+            // Check if chatToggleButton exists before trying to access its style
+            if (chatToggleButton) chatToggleButton.style.display = 'flex';
         }
     }
 
@@ -47,9 +63,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!userMessage) return;
 
         appendMessage('user', userMessage);
-        chatInput.value = ''; // Clear input
+        chatInput.value = '';
 
-        // Add a typing indicator for a better UX
         const typingIndicator = document.createElement('div');
         typingIndicator.classList.add('message-bubble', 'assistant', 'typing-indicator');
         typingIndicator.textContent = 'Archie is typing...';
@@ -65,7 +80,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 body: JSON.stringify({ message: userMessage, threadId: threadId }),
             });
 
-            // Remove typing indicator
             chatBody.removeChild(typingIndicator);
 
             if (!response.ok) {
@@ -76,7 +90,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await response.json();
             appendMessage('assistant', data.reply);
 
-            // Save new threadId if it's updated or new
             if (data.threadId && data.threadId !== threadId) {
                 threadId = data.threadId;
                 localStorage.setItem('archieThreadId', threadId);
@@ -84,7 +97,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         } catch (error) {
             console.error('Archie Chat Error:', error);
-            // Remove typing indicator if it's still there
             if (chatBody.contains(typingIndicator)) {
                  chatBody.removeChild(typingIndicator);
             }
@@ -96,28 +108,24 @@ document.addEventListener('DOMContentLoaded', () => {
     // const hasOpenedManually = sessionStorage.getItem('archieOpenedManually');
     // if (!hasOpenedManually) {
     //     setTimeout(() => {
-    //         if (!chatContainer.classList.contains('open')) { // Only auto-open if not already open
+    //         if (!chatContainer.classList.contains('open')) {
     //             toggleChat(true);
     //         }
     //     }, AUTO_OPEN_DELAY);
     // }
 
-    // Mark as opened manually if user clicks the toggle button
     chatToggleButton.addEventListener('click', () => {
         sessionStorage.setItem('archieOpenedManually', 'true');
     });
 
-    // Mark as opened manually if user clicks the chat input (after auto-open)
     chatInput.addEventListener('focus', () => {
         sessionStorage.setItem('archieOpenedManually', 'true');
     });
 
-    // If chat was open on previous session, reopen it
     if (sessionStorage.getItem('archieChatOpen') === 'true') {
         toggleChat(true);
     }
 
-    // Persist chat open state across refreshes (within session)
     window.addEventListener('beforeunload', () => {
         if (chatContainer.classList.contains('open')) {
             sessionStorage.setItem('archieChatOpen', 'true');

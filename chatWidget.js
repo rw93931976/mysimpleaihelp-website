@@ -92,15 +92,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Auto-open logic (only if not opened manually by user this session)
-    const hasOpenedManually = sessionStorage.getItem('archieOpenedManually');
-    if (!hasOpenedManually) {
-        setTimeout(() => {
-            if (!chatContainer.classList.contains('open')) { // Only auto-open if not already open
-                toggleChat(true);
-            }
-        }, AUTO_OPEN_DELAY);
-    }
+    // Auto-open logic DISABLED for debugging
+    // const hasOpenedManually = sessionStorage.getItem('archieOpenedManually');
+    // if (!hasOpenedManually) {
+    //     setTimeout(() => {
+    //         if (!chatContainer.classList.contains('open')) { // Only auto-open if not already open
+    //             toggleChat(true);
+    //         }
+    //     }, AUTO_OPEN_DELAY);
+    // }
 
     // Mark as opened manually if user clicks the toggle button
     chatToggleButton.addEventListener('click', () => {

@@ -50,7 +50,7 @@
 
 .chat-container.open {
     display: flex; /* Show when open */
-    transform: translateY(-70px); /* Move up to desired position above button */
+    transform: translateY(-580px); /* Move up to desired position above button */
     opacity: 1;
 }
 

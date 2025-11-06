@@ -35,6 +35,7 @@
     </script>
     
 <script src="https://sites.super.myninja.ai/_assets/ninja-daytona-script.js"></script>
+    <link rel="stylesheet" href="chatWidget.css">
 </head>
 <body>
     <!-- Navigation -->
@@ -255,5 +256,29 @@
     </footer>
 
     <script src="script.js"></script>
+    
+    <!-- Chat Widget HTML -->
+    <div id="archie-chat-widget">
+        <div class="chat-toggle-button" id="chat-toggle-button">
+            <img src="images/owl-logo.png" alt="Archie the Wise Owl" class="chat-icon">
+        </div>
+        <div class="chat-container" id="chat-container">
+            <div class="chat-header">
+                <img src="images/owl-logo.png" alt="Archie" class="chat-header-icon">
+                <span>Archie the Wise Owl</span>
+                <button class="close-chat-button" id="close-chat-button">×</button>
+            </div>
+            <div class="chat-body" id="chat-body">
+                <div class="message-bubble assistant">Hello! I'm Archie, your AI assistant. How can I help you today?</div>
+            </div>
+            <div class="chat-input-area">
+                <input type="text" id="chat-input" placeholder="Ask Archie anything...">
+                <button id="chat-send-button">Send</button>
+            </div>
+        </div>
+    </div>
+    <!-- End Chat Widget HTML -->
+    
+    <script src="chatWidget.js"></script>
 </body>
 </html>

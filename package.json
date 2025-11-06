@@ -1,0 +1,17 @@
+{
+  "name": "mysimpleaihelp-website",
+  "version": "1.0.0",
+  "description": "My Simple AI Help - AI education website for beginners",
+  "type": "module",
+  "scripts": {
+    "dev": "vercel dev",
+    "build": "echo 'No build step required for static site'"
+  },
+  "dependencies": {
+    "openai": "^4.20.1",
+    "@supabase/supabase-js": "^2.38.4"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

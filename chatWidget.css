@@ -36,21 +36,26 @@
     border-radius: 50%; /* Make it round */
 }
 
-.chat-container {
-    display: none; /* Hidden by default */
-    width: 350px;
-    height: 500px;
-    background-color: #f9f9f9;
-    border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-    flex-direction: column;
-    overflow: hidden;
-    position: fixed !important;
-    bottom: 90px !important;
-    right: 20px !important;
-    z-index: 9999 !important;
-    opacity: 0;
-    transition: opacity 0.3s ease-out;
+..chat-container {
+  display: none; /* hidden until opened */
+  position: fixed !important;
+  right: 20px !important;
+  bottom: 20px !important;
+
+  /* CLAMP SIZE */
+  width: min(92vw, 380px) !important;
+  height: min(80vh, 560px) !important;
+  max-width: 420px !important;
+  max-height: calc(100vh - 120px) !important;
+
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0,0,0,.3);
+  overflow: hidden;            /* container clips chrome, inner scrolls */
+  z-index: 2147483000 !important;
+
+  opacity: 0;
+  transition: opacity .3s ease-out;
 }
 
 .chat-container.open {

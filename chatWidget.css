@@ -179,3 +179,11 @@
         height: 35px;
     }
 }
+@media (max-width: 600px) {
+  .chat-container {
+    right: 10px !important;
+    bottom: 10px !important;
+    width: 92vw !important;
+    height: 78vh !important;
+  }
+}

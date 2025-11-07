@@ -792,3 +792,45 @@ input:focus {
         display: none;
     }
 }
+/* EMERGENCY CSS FIX - Add this to the END of styles.css */
+/* This forces the chatbot to render properly outside all containers */
+
+/* Ensure body allows fixed positioning */
+body {
+    position: relative !important;
+    min-height: 100vh !important;
+}
+
+/* Force footer to render correctly */
+.footer {
+    position: relative !important;
+    width: 100% !important;
+    clear: both !important;
+}
+
+/* Ensure chatbot is truly independent */
+#archie-chat-widget {
+    position: fixed !important;
+    bottom: 20px !important;
+    right: 20px !important;
+    z-index: 99999 !important;
+    pointer-events: auto !important;
+}
+
+/* Fix any overflow issues that might clip content */
+html, body {
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+}
+
+/* Ensure all sections render properly */
+section {
+    position: relative !important;
+    width: 100% !important;
+}
+
+.newsletter {
+    position: relative !important;
+    width: 100% !important;
+    overflow: visible !important;
+}

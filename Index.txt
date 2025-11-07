@@ -1,0 +1,14 @@
+<main>
+    <!-- Main site content goes here -->
+    <h1>Welcome to My Simple AI Help Website</h1>
+    <p>This is a site dedicated to helping users understand and utilize AI technology.</p>
+    <!-- Add your additional main content here -->
+</main>
+
+<footer>
+    <p>&copy; 2025 My Simple AI Help Website. All rights reserved.</p>
+</footer>
+
+<div id="archie-chat-widget">
+    <!-- Chat widget content -->
+</div>

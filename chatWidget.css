@@ -164,26 +164,66 @@
 
 /* Responsive Adjustments */
 @media (max-width: 600px) {
-    .chat-container {
-        width: 90vw; /* Take more width on small screens */
-        height: 80vh; /* Take more height */
-        bottom: 10px;
-        right: 10px;
-    }
-    .chat-toggle-button {
-        width: 50px;
-        height: 50px;
-    }
-    .chat-toggle-button .chat-icon {
-        width: 35px;
-        height: 35px;
-    }
+    /* Pin the entire widget wrapper bottom-right */
+#archie-chat-widget {
+  position: fixed !important;
+  right: 20px !important;
+  bottom: 20px !important;
+  width: min(92vw, 380px) !important;
+  z-index: 2147483000 !important; /* above page */
 }
+
+/* Floating toggle button */
+#archie-chat-widget .chat-toggle-button {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+}
+
+/* The chat panel itself */
+#archie-chat-widget .chat-container {
+  display: none;                  /* hidden until opened */
+  position: relative;             /* relative inside the fixed wrapper */
+  width: 100% !important;
+  height: min(80vh, 560px) !important;
+  max-height: calc(100vh - 120px) !important;
+
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0,0,0,.3);
+  overflow: hidden;
+
+  /* Force vertical stack — fixes "one long row" */
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+/* Header, body, input must fill width and stack */
+#archie-chat-widget .chat-header,
+#archie-chat-widget .chat-body,
+#archie-chat-widget .chat-input-area {
+  width: 100% !important;
+}
+
+/* Messages scroll inside, not the page */
+#archie-chat-widget .chat-body {
+  flex: 1 1 auto;
+  overflow-y: auto;
+}
+
+/* When JS opens the chat, it usually toggles .open */
+#archie-chat-widget .chat-container.open {
+  display: flex !important;
+}
+
+/* Mobile tweak */
 @media (max-width: 600px) {
-  .chat-container {
+  #archie-chat-widget {
     right: 10px !important;
     bottom: 10px !important;
     width: 92vw !important;
+  }
+  #archie-chat-widget .chat-container {
     height: 78vh !important;
   }
 }

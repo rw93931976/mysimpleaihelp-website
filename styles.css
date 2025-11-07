@@ -1380,3 +1380,15 @@ textarea:focus {
         display: none;
     }
 }
+#archie-chat-widget {
+  position: fixed !important;
+  right: 20px !important;
+  bottom: 30px !important;
+  z-index: 99999 !important;
+  pointer-events: auto !important;
+  display: block !important;
+}
+
+footer, .footer, .footer-bottom {
+  z-index: 1 !important;
+}

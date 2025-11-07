@@ -1392,3 +1392,6 @@ textarea:focus {
 footer, .footer, .footer-bottom {
   z-index: 1 !important;
 }
+body {
+  overflow-x: hidden !important;
+}

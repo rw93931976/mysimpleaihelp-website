@@ -1,14 +1,110 @@
-<main>
-    <!-- Main site content goes here -->
-    <h1>Welcome to My Simple AI Help Website</h1>
-    <p>This is a site dedicated to helping users understand and utilize AI technology.</p>
-    <!-- Add your additional main content here -->
-</main>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Simple AI Help</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="chatWidget.css?v=5"> <!-- Archie's chat widget CSS -->
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>My Simple AI Help</h1>
+            <nav>
+                <button class="hamburger" aria-label="Toggle navigation">&#9776;</button>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="book.html">Book</a></li>
+                    <li><a href="faq.html">FAQ</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
 
-<footer>
-    <p>&copy; 2025 My Simple AI Help Website. All rights reserved.</p>
-</footer>
+    <main>
+        <section id="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <h2>AI Made Simple Starts Here</h2>
+                    <p>Learn to use AI confidently—one friendly step at a time</p>
+                    <a href="book.html" class="btn">Get Started with Archie</a>
+                </div>
+                <div class="hero-image">
+                    <!-- Image of Archie or AI-related graphic -->
+                    <img src="/img/everyday-chatgpt-cover.webp" alt="Everyday ChatGPT Book Cover">
+                </div>
+            </div>
+        </section>
 
-<div id="archie-chat-widget">
-    <!-- Chat widget content -->
-</div>
+        <section id="features">
+            <div class="container">
+                <h2>Why Choose My Simple AI Help?</h2>
+                <div class="feature-grid">
+                    <div class="feature-item">
+                        <h3>Clear & Concise</h3>
+                        <p>No jargon, just straightforward explanations you can understand.</p>
+                    </div>
+                    <div class="feature-item">
+                        <h3>Practical Applications</h3>
+                        <p>Learn how to use AI in your daily life and work effectively.</p>
+                    </div>
+                    <div class="feature-item">
+                        <h3>Expert Guidance</h3>
+                        <p>Benefit from insights curated by experienced AI educators.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="cta">
+            <div class="container">
+                <h2>Ready to Master AI?</h2>
+                <p>Join our community and transform your AI skills today!</p>
+                <a href="contact.html" class="btn">Sign Up Now</a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 My Simple AI Help. All rights reserved.</p>
+            <div class="social-links">
+                <a href="#"><img src="/img/facebook-icon.png" alt="Facebook"></a>
+                <a href="#"><img src="/img/twitter-icon.png" alt="Twitter"></a>
+                <a href="#"><img src="/img/linkedin-icon.png" alt="LinkedIn"></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Archie Chat Widget HTML -->
+    <div class="chat-bubble-minimized">
+        <img src="/img/archie_owl.png" alt="Archie the Wise Owl">
+    </div>
+
+    <div id="archie-chat-widget">
+        <div class="chat-header">
+            <div class="chat-title">
+                <img src="/img/archie_owl.png" alt="Archie Icon">
+                Archie the Wise Owl
+            </div>
+            <div class="chat-header-buttons">
+                <button id="archie-chat-minimize">&#x2014;</button> <!-- Minus sign for minimize -->
+                <button id="archie-chat-close">&times;</button> <!-- Times for close -->
+            </div>
+        </div>
+        <div class="chat-messages">
+            <!-- Messages will be appended here by JavaScript -->
+        </div>
+        <div class="chat-input-area">
+            <input type="text" id="chat-input" placeholder="Ask Archie anything...">
+            <button id="chat-send">Send</button>
+        </div>
+    </div>
+
+    <script src="chatWidget.js" defer></script>
+</body>
+</html>

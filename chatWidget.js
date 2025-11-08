@@ -1,136 +1,175 @@
-// chatWidget.js
+// Forced update
 document.addEventListener('DOMContentLoaded', () => {
-    // Helper function to get element and log if not found
-    function getElement(id) {
-        const element = document.getElementById(id);
-        if (!element) {
-            console.error(`Archie Chat Widget Error: Element with ID "${id}" not found.`);
+    const chatWidget = document.getElementById('archie-chat-widget');
+    const chatToggle = document.getElementById('archie-chat-toggle');
+    const chatClose = document.getElementById('archie-chat-close');
+    const chatMinimize = document.getElementById('archie-chat-minimize'); // New minimize button
+    const chatBubbleMinimized = document.querySelector('.chat-bubble-minimized');
+    const chatMessages = document.querySelector('.chat-messages');
+    const chatInput = document.getElementById('chat-input');
+    const chatSend = document.getElementById('chat-send');
+
+    // State management in sessionStorage for tab-specific persistence
+    let archieOpened = sessionStorage.getItem('archieOpened') === 'true';
+    let archieMinimized = sessionStorage.getItem('archieMinimized') === 'true';
+    let archieGreeted = sessionStorage.getItem('archieGreeted') === 'true';
+    let archieUserInteracted = sessionStorage.getItem('archieUserInteracted') === 'true'; // Track if user has explicitly opened/closed/minimized
+
+    // Use localStorage for thread ID to persist across tabs/sessions
+    let archieThreadId = localStorage.getItem('archieThreadId');
+
+    // Function to open the chat window
+    function openChat() {
+        chatWidget.classList.add('open');
+        chatBubbleMinimized.style.display = 'none'; // Hide minimized bubble when chat is open
+        archieOpened = true;
+        archieMinimized = false; // When opened, it's not minimized
+        sessionStorage.setItem('archieOpened', 'true');
+        sessionStorage.setItem('archieMinimized', 'false');
+        sessionStorage.setItem('archieUserInteracted', 'true'); // User has interacted
+        scrollToBottom();
+        if (!archieGreeted) {
+            greetOnce();
         }
-        return element;
     }
 
-    const chatToggleButton = getElement('chat-toggle-button');
-    const chatContainer = getElement('chat-container');
-    const closeChatButton = getElement('close-chat-button');
-    const chatInput = getElement('chat-input');
-    const chatSendButton = getElement('chat-send-button');
-    const chatBody = getElement('chat-body');
-
-    // IMPORTANT: Add checks before using elements to prevent errors from undefined
-    if (!chatToggleButton || !chatContainer || !closeChatButton || !chatInput || !chatSendButton || !chatBody) {
-        console.error("Archie Chat Widget: Essential elements are missing. Widget functionality disabled.");
-        return; // Stop execution if critical elements are missing
+    // Function to close the chat window (full close, goes back to minimized icon state)
+    function closeChat() {
+        chatWidget.classList.remove('open');
+        chatBubbleMinimized.style.display = 'flex'; // Show minimized bubble when chat is closed
+        archieOpened = false;
+        archieMinimized = true; // When closed, it implies it's now minimized to the icon
+        sessionStorage.setItem('archieOpened', 'false');
+        sessionStorage.setItem('archieMinimized', 'true');
+        sessionStorage.setItem('archieUserInteracted', 'true'); // User has interacted
     }
 
-    const API_ENDPOINT = '/api/chat';
-    const AUTO_OPEN_DELAY = 7000;
-
-    let threadId = localStorage.getItem('archieThreadId');
-
-    function appendMessage(sender, text) {
-        const messageBubble = document.createElement('div');
-        messageBubble.classList.add('message-bubble', sender);
-        messageBubble.textContent = text;
-        chatBody.appendChild(messageBubble);
-        chatBody.scrollTop = chatBody.scrollHeight;
-    }
-
-    function toggleChat(open) {
-        if (open) {
-            chatContainer.classList.add('open');
-            // Check if chatToggleButton exists before trying to access its style
-            if (chatToggleButton) chatToggleButton.style.display = 'none';
-            chatInput.focus();
+    // Function to toggle minimize/maximize state
+    function toggleMinimize() {
+        if (chatWidget.classList.contains('open')) {
+            // If currently open, minimize it
+            chatWidget.classList.remove('open');
+            chatBubbleMinimized.style.display = 'flex'; // Show minimized bubble
+            archieMinimized = true;
+            archieOpened = false;
+            sessionStorage.setItem('archieMinimized', 'true');
+            sessionStorage.setItem('archieOpened', 'false');
+            sessionStorage.setItem('archieUserInteracted', 'true');
         } else {
-            chatContainer.classList.remove('open');
-            // Check if chatToggleButton exists before trying to access its style
-            if (chatToggleButton) chatToggleButton.style.display = 'flex';
+            // If currently minimized, open it
+            openChat();
         }
     }
 
-    // --- Event Listeners ---
-    chatToggleButton.addEventListener('click', () => toggleChat(true));
-    closeChatButton.addEventListener('click', () => toggleChat(false));
+    // Add event listeners for new buttons
+    if (chatToggle) {
+        chatToggle.addEventListener('click', openChat); // This opens from the initial invisible state or from a truly closed (not just minimized) state
+    }
+    if (chatClose) {
+        chatClose.addEventListener('click', closeChat); // This now effectively minimizes the chat to the icon
+    }
+    if (chatMinimize) {
+        chatMinimize.addEventListener('click', toggleMinimize); // This specifically handles minimize/maximize
+    }
+    // The minimized chat bubble itself can also toggle (open) the chat
+    if (chatBubbleMinimized) {
+        chatBubbleMinimized.addEventListener('click', openChat);
+    }
 
-    chatInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-            chatSendButton.click();
-        }
-    });
+    // Initial state setup
+    // Hide minimized icon by default on load, only show if chat is not open and user hasn't interacted, or if it was explicitly minimized
+    if (archieOpened && !archieMinimized) {
+        openChat();
+    } else if (archieMinimized) {
+        chatWidget.classList.remove('open'); // Ensure main widget is closed
+        chatBubbleMinimized.style.display = 'flex'; // Show the minimized bubble
+    } else {
+        // Default: widget starts closed and minimized icon is hidden until auto-open or user interaction
+        chatWidget.classList.remove('open');
+        chatBubbleMinimized.style.display = 'none';
+    }
 
-    chatSendButton.addEventListener('click', async () => {
-        const userMessage = chatInput.value.trim();
-        if (!userMessage) return;
 
-        appendMessage('user', userMessage);
+    // Auto-open logic (only if not already opened or minimized by user interaction in current session)
+    if (!archieOpened && !archieUserInteracted && !archieMinimized) {
+        setTimeout(() => {
+            // Check again in case user interacted while waiting
+            if (!sessionStorage.getItem('archieOpened') && !sessionStorage.getItem('archieUserInteracted')) {
+                openChat();
+                // We're now setting archieUserInteracted to true in openChat, so it won't auto-open again.
+            }
+        }, 7000); // 7-second delay
+    }
+
+    // Existing functions (send message, scroll, greet)
+    async function sendMessage() {
+        const messageText = chatInput.value.trim();
+        if (messageText === '') return;
+
+        appendMessage(messageText, 'user-message');
         chatInput.value = '';
-
-        const typingIndicator = document.createElement('div');
-        typingIndicator.classList.add('message-bubble', 'assistant', 'typing-indicator');
-        typingIndicator.textContent = 'Archie is typing...';
-        chatBody.appendChild(typingIndicator);
-        chatBody.scrollTop = chatBody.scrollHeight;
+        scrollToBottom();
 
         try {
-            const response = await fetch(API_ENDPOINT, {
+            const response = await fetch('https://chat-api.mysimpleaihelp.com/chat', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ message: userMessage, threadId: threadId }),
+                body: JSON.stringify({
+                    message: messageText,
+                    thread_id: archieThreadId,
+                }),
             });
 
-            chatBody.removeChild(typingIndicator);
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.message || 'Failed to get response from Archie');
-            }
-
             const data = await response.json();
-            appendMessage('assistant', data.reply);
 
-            if (data.threadId && data.threadId !== threadId) {
-                threadId = data.threadId;
-                localStorage.setItem('archieThreadId', threadId);
+            if (response.ok) {
+                appendMessage(data.response, 'bot-message');
+                // Store new thread ID if it's the first message or if it changed
+                if (data.thread_id && data.thread_id !== archieThreadId) {
+                    archieThreadId = data.thread_id;
+                    localStorage.setItem('archieThreadId', archieThreadId);
+                }
+            } else {
+                appendMessage(`Error: ${data.detail || 'Could not get a response from Archie.'}`, 'bot-message');
             }
-
         } catch (error) {
-            console.error('Archie Chat Error:', error);
-            if (chatBody.contains(typingIndicator)) {
-                 chatBody.removeChild(typingIndicator);
-            }
-            appendMessage('assistant', 'Oops! Archie seems to be having a bit of trouble right now. Please try again in a moment or refresh the page.');
+            console.error('Error sending message:', error);
+            appendMessage('Apologies, I encountered an error. Please try again.', 'bot-message');
         }
-    });
-
-    // Auto-open logic DISABLED for debugging
-    // const hasOpenedManually = sessionStorage.getItem('archieOpenedManually');
-    // if (!hasOpenedManually) {
-    //     setTimeout(() => {
-    //         if (!chatContainer.classList.contains('open')) {
-    //             toggleChat(true);
-    //         }
-    //     }, AUTO_OPEN_DELAY);
-    // }
-
-    chatToggleButton.addEventListener('click', () => {
-        sessionStorage.setItem('archieOpenedManually', 'true');
-    });
-
-    chatInput.addEventListener('focus', () => {
-        sessionStorage.setItem('archieOpenedManually', 'true');
-    });
-
-    if (sessionStorage.getItem('archieChatOpen') === 'true') {
-        toggleChat(true);
+        scrollToBottom();
     }
 
-    window.addEventListener('beforeunload', () => {
-        if (chatContainer.classList.contains('open')) {
-            sessionStorage.setItem('archieChatOpen', 'true');
-        } else {
-            sessionStorage.removeItem('archieChatOpen');
+    function appendMessage(text, type) {
+        const messageElement = document.createElement('div');
+        messageElement.classList.add('chat-message', type);
+        messageElement.textContent = text;
+        chatMessages.appendChild(messageElement);
+        scrollToBottom();
+    }
+
+    function scrollToBottom() {
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function greetOnce() {
+        if (!archieGreeted) {
+            appendMessage("Hello! I'm Archie, your AI assistant. How can I help you today?", 'bot-message');
+            archieGreeted = true;
+            sessionStorage.setItem('archieGreeted', 'true');
+        }
+    }
+
+    chatSend.addEventListener('click', sendMessage);
+    chatInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            sendMessage();
         }
     });
+
+    // Handle initial greeting if chat is opened on load and not yet greeted
+    if (archieOpened && !archieGreeted) {
+        greetOnce();
+    }
 });

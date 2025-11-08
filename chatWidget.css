@@ -1,195 +1,264 @@
-/* Archie Chat Widget Styles */
-
-#archie-chat-widget {
-    position: fixed;
-    bottom: 20px; /* Aligned with the bottom */
-    right: 20px; /* Aligned with the right */
-    width: 350px; /* Fixed width */
-    max-height: calc(100vh - 40px); /* Max height to fit viewport, with some margin */
-    min-height: 200px; /* Minimum height for usability */
-    background-color: #f5f5f5;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    z-index: 1000;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    transition: transform 0.3s ease-out, opacity 0.3s ease-out; /* Smooth transition for open/close */
-    transform: translateY(100%) scale(0.8); /* Start hidden below and smaller */
-    opacity: 0;
-    pointer-events: none; /* Block interactions when hidden */
+/* General Body Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    color: #333;
+    line-height: 1.6;
 }
 
-#archie-chat-widget.open {
-    transform: translateY(0) scale(1); /* Slide up and scale to full size */
-    opacity: 1;
-    pointer-events: all; /* Enable interactions when open */
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px 0;
 }
 
 /* Header */
-.chat-header {
-    background-color: #2e7d32; /* A shade of green for Archie */
+header {
+    background-color: #2e7d32; /* Dark green */
     color: white;
-    padding: 12px 15px;
-    border-top-left-radius: 12px;
-    border-top-right-radius: 12px;
+    padding: 10px 0;
+    position: relative;
+    z-index: 10;
+}
+
+header .container {
     display: flex;
-    align-items: center;
     justify-content: space-between;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    min-height: 48px; /* Ensure header has a minimum height */
-}
-
-.chat-header .chat-title {
-    font-weight: bold;
-    font-size: 1.1em;
-    display: flex; /* To align icon with text */
     align-items: center;
-    gap: 8px; /* Space between icon and text */
 }
 
-.chat-header .chat-title img {
-    height: 28px; /* Size of the owl icon */
-    width: 28px;
-    border-radius: 50%; /* Make it circular */
-    background-color: #fff; /* White background for the icon */
-    padding: 2px;
+header h1 {
+    margin: 0;
+    font-size: 1.8em;
 }
 
-.chat-header-buttons {
+header nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
     display: flex;
-    gap: 8px; /* Space between buttons */
 }
 
-.chat-header-buttons button {
+header nav ul li {
+    margin-left: 20px;
+}
+
+header nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+header nav ul li a:hover {
+    color: #c8e6c9; /* Lighter green on hover */
+}
+
+.hamburger {
+    display: none; /* Hidden on desktop */
     background: none;
     border: none;
     color: white;
-    font-size: 1.2em;
+    font-size: 2em;
     cursor: pointer;
-    padding: 5px;
-    border-radius: 50%;
-    transition: background-color 0.2s ease;
 }
 
-.chat-header-buttons button:hover {
-    background-color: rgba(255, 255, 255, 0.2);
-}
-
-/* Messages container */
-.chat-messages {
-    flex-grow: 1;
-    padding: 15px;
-    overflow-y: auto;
-    background-color: #e8f5e9; /* Light green background for messages */
-    border-bottom-left-radius: 12px; /* For when input is not visible */
-    border-bottom-right-radius: 12px; /* For when input is not visible */
-}
-
-/* Message bubbles */
-.chat-message {
-    max-width: 80%;
-    padding: 10px 14px;
-    border-radius: 18px;
-    margin-bottom: 10px;
-    line-height: 1.4;
-    word-wrap: break-word; /* Ensure long words wrap */
-}
-
-.user-message {
-    background-color: #c5e1a5; /* Lighter green for user */
-    color: #333;
-    margin-left: auto;
-    border-bottom-right-radius: 4px; /* Tail for user message */
-}
-
-.bot-message {
-    background-color: #a7d9c6; /* Slightly darker green/blue for bot */
-    color: #333;
-    margin-right: auto;
-    border-bottom-left-radius: 4px; /* Tail for bot message */
-}
-
-
-/* Input area */
-.chat-input-area {
-    display: flex;
-    padding: 10px 15px;
-    border-top: 1px solid #ccc;
-    background-color: #f5f5f5;
-    border-bottom-left-radius: 12px;
-    border-bottom-right-radius: 12px;
-}
-
-.chat-input-area input {
-    flex-grow: 1;
-    border: 1px solid #ddd;
-    border-radius: 20px;
-    padding: 10px 15px;
-    font-size: 0.95em;
-    margin-right: 10px;
-    outline: none;
-    transition: border-color 0.2s ease;
-}
-
-.chat-input-area input:focus {
-    border-color: #2e7d32;
-}
-
-.chat-input-area button {
-    background-color: #4CAF50; /* Green send button */
+/* Hero Section */
+#hero {
+    background: linear-gradient(135deg, #4CAF50, #8bc34a); /* Green gradient */
     color: white;
-    border: none;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
+    padding: 80px 0;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+#hero .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+}
+
+.hero-content {
+    max-width: 700px;
+    z-index: 2;
+}
+
+#hero h2 {
+    font-size: 3em;
+    margin-bottom: 15px;
+}
+
+#hero p {
     font-size: 1.2em;
+    margin-bottom: 30px;
+}
+
+.btn {
+    display: inline-block;
+    background-color: #2e7d32; /* Dark green button */
+    color: white;
+    padding: 12px 25px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #1b5e20; /* Even darker green on hover */
+}
+
+.hero-image {
+    position: relative;
+    z-index: 1;
+}
+
+.hero-image img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+
+/* Features Section */
+#features {
+    padding: 60px 0;
+    text-align: center;
+    background-color: #f9f9f9;
+}
+
+#features h2 {
+    font-size: 2.5em;
+    margin-bottom: 40px;
+    color: #2e7d32;
+}
+
+.feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+}
+
+.feature-item {
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.feature-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+}
+
+.feature-item h3 {
+    color: #4CAF50;
+    font-size: 1.5em;
+    margin-bottom: 15px;
+}
+
+.feature-item p {
+    color: #555;
+}
+
+/* CTA Section */
+#cta {
+    background-color: #333;
+    color: white;
+    padding: 80px 0;
+    text-align: center;
+}
+
+#cta h2 {
+    font-size: 2.8em;
+    margin-bottom: 20px;
+}
+
+#cta p {
+    font-size: 1.1em;
+    margin-bottom: 40px;
+}
+
+/* Footer */
+footer {
+    background-color: #222;
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+    font-size: 0.9em;
+}
+
+footer .container {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    transition: background-color 0.2s ease;
+    gap: 15px;
 }
 
-.chat-input-area button:hover {
-    background-color: #388e3c; /* Darker green on hover */
+.social-links a {
+    margin: 0 10px;
+    display: inline-block;
 }
 
-/* Minimized chat bubble (the floating icon) */
-.chat-bubble-minimized {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background-color: #2e7d32; /* Same green as header */
-    border-radius: 50%;
-    width: 60px;
-    height: 60px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
-    z-index: 999; /* Slightly lower than main widget but above page content */
-    transition: transform 0.2s ease-in-out;
-    /* Initially hidden by JS and shown when chat is minimized */
-    /* display: none; */
+.social-links img {
+    width: 24px;
+    height: 24px;
+    vertical-align: middle;
 }
 
-.chat-bubble-minimized img {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background-color: #fff;
-    padding: 2px;
+/* Responsive Design */
+@media (max-width: 768px) {
+    header .container {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    header nav {
+        order: 3; /* Move nav below title on small screens */
+        width: 100%;
+        text-align: center;
+        margin-top: 15px;
+    }
+
+    header nav ul {
+        flex-direction: column;
+        display: none; /* Hidden by default for mobile */
+    }
+
+    header nav ul.active {
+        display: flex;
+    }
+
+    header nav ul li {
+        margin: 10px 0;
+    }
+
+    .hamburger {
+        display: block; /* Show hamburger icon */
+        position: absolute;
+        right: 20px;
+        top: 20px;
+    }
+
+    #hero h2 {
+        font-size: 2.2em;
+    }
+
+    #hero p {
+        font-size: 1em;
+    }
+
+    .feature-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
-.chat-bubble-minimized:hover {
-    transform: scale(1.05);
-}
-
-/* Hide the minimized bubble when the main chat widget is open */
-#archie-chat-widget.open + .chat-bubble-minimized {
-    display: none;
-}
+/* Forcing Vercel Redeploy */
+/* This comment is added to force a redeploy if Vercel caching is stuck. */
